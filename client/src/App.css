@@ -1,0 +1,75 @@
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+body {
+  background: #003169;
+}
+
+@media only screen and (max-width: 600px) {
+  .form {
+    max-width: 350px;
+    max-height: 500px;
+    margin: 125px auto;
+    background: #ffffff;
+    border-radius: 20px;
+  }
+
+  .headline-form {
+    text-align: center;
+    padding: 1.5rem;
+  }
+
+  .wrap-input {
+    display: flex;
+    flex-direction: column;
+    max-width: 250px;
+    margin: 0 auto;
+  }
+
+  label {
+    padding-block: 0.25rem;
+  }
+
+  .username,
+  .email,
+  .password,
+  .password2 {
+    height: 35px;
+    margin-bottom: 15px;
+    outline: none;
+    border: 1px solid #dddddd;
+  }
+
+  .btn-submit {
+    background: #3ec6ff;
+    border: none;
+    border-radius: 20px;
+    height: 40px;
+    min-width: 200px;
+    margin-top: 10px;
+  }
+
+  .btn-submit:hover {
+    background: #42ffc3;
+    cursor: pointer;
+  }
+
+  .p-form {
+    text-align: center;
+    padding: 0.5rem;
+  }
+
+  .link-form {
+    text-align: center;
+    text-decoration: none;
+    color: #222;
+    margin-bottom: 20px;
+  }
+
+  .link-form:hover {
+    text-decoration: underline;
+  }
+}
