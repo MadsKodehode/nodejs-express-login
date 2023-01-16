@@ -4,7 +4,7 @@ import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 import RegisterForm from "./components/RegisterForm";
 import RegisterContent from "./components/RegisterContent";
 import LoginContent from "./components/LoginContent";
-
+import LoggedIn from "./components/LoggedIn";
 function App() {
   return (
     <div className="App">
@@ -28,6 +28,10 @@ function App() {
                 children={<LoginContent />}
               />
             }
+          ></Route>
+          <Route
+            path="/auth-access"
+            element={<LoggedIn url={"http://localhost:3500/auth-access"} />}
           ></Route>
         </Routes>
       </Router>
