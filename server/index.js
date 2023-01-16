@@ -25,6 +25,9 @@ app.use(express.urlencoded({ extended: false }));
 app.use("/register", require("./routes/register"));
 //Login route
 app.use("/login", require("./routes/login"));
+app.use("/free-access", require("./routes/free-access"));
+
+app.use("/auth-access", require("./routes/authorized-access"));
 
 //Listen for activity on port
 app.listen(PORT, () => console.log(`Server running on ${PORT}`));
