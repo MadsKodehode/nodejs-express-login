@@ -72,4 +72,14 @@ body {
   .link-form:hover {
     text-decoration: underline;
   }
+
+  .response-p {
+    text-align: center;
+    padding-block: 0.25rem;
+  }
+  .error {
+    text-align: center;
+    padding-block: 0.25rem;
+    color: #ff5656;
+  }
 }

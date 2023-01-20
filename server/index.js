@@ -6,7 +6,7 @@ const path = require("path");
 const dbConnect = require("./db/dbConnect");
 //Cors
 const cors = require("cors");
-
+const cookieParser = require("cookie-parser");
 //Port
 const PORT = 3500;
 const app = express();
@@ -19,14 +19,18 @@ dbConnect();
 app.use(cors());
 //Body parser
 app.use(express.json());
+
 //Form data handler
 app.use(express.urlencoded({ extended: false }));
+//Cookie Parser
+app.use(cookieParser());
 //Register route
 app.use("/register", require("./routes/register"));
 //Login route
 app.use("/login", require("./routes/login"));
+//Free access
 app.use("/free-access", require("./routes/free-access"));
-
+//Auth access
 app.use("/auth-access", require("./routes/authorized-access"));
 
 //Listen for activity on port
