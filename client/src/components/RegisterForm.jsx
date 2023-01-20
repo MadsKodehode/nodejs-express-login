@@ -1,9 +1,5 @@
 const RegisterForm = ({ url, children }) => {
-  return (
-    <form className="form" action={url} method="POST">
-      {children}
-    </form>
-  );
+  return <form className="form">{children}</form>;
 };
 
 export default RegisterForm;
