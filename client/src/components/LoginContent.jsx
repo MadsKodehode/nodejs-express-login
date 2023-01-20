@@ -1,3 +1,4 @@
+import { useEffect } from "react";
 import { useState } from "react";
 import { Link, redirect } from "react-router-dom";
 import Cookies from "universal-cookie";
@@ -7,26 +8,31 @@ const LoginContent = () => {
   const [password, setPassword] = useState("");
   const [response, setResponse] = useState([]);
   const [login, setLogin] = useState(false);
-  const handleLogin = (e) => {
-    e.preventDefault();
-    //Send POST request
-    fetch("http://localhost:3500/login", {
+  const fetchLogin = async () => {
+    //POST request to login endpoint
+    const res = await fetch("http://localhost:3500/login", {
       method: "POST",
       headers: {
         "Content-type": "application/json",
       },
-
       body: JSON.stringify({
         email,
         password,
       }),
-    })
-      .then((res) => res.json())
-      .then((data) => setResponse(data))
-      .then(cookies.set("jwt", response.token, { path: "/" }))
-      .catch((err) => console.log(err));
+    });
 
-    if (response.success) window.location.href = "/auth-access";
+    //Await response
+    const data = await res.json();
+
+    cookies.set("jwt", data.token, { path: "/" });
+
+    return setResponse(data);
+  };
+  const handleLogin = (e) => {
+    e.preventDefault();
+    fetchLogin();
+
+    return setLogin(true);
   };
 
   return (
@@ -56,7 +62,7 @@ const LoginContent = () => {
         >
           Sign in
         </button>
-        {response.success ? (
+        {login ? (
           <p className="response-p">{response.message}</p>
         ) : (
           <p className="error">{response.message}</p>
