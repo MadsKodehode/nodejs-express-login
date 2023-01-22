@@ -4,10 +4,22 @@ import { Link, redirect } from "react-router-dom";
 import Cookies from "universal-cookie";
 const cookies = new Cookies();
 const LoginContent = () => {
+  //Input states
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+
+  //Reset state when re entering email and password
+  useEffect(() => {
+    setDisabled(false);
+  }, [email, password]);
+
+  //State for displaying response
   const [response, setResponse] = useState([]);
-  const [login, setLogin] = useState(false);
+
+  //State for disabling button if clicked once
+  const [disabled, setDisabled] = useState(false);
+
+  //Function for sending post request to login endpoint
   const fetchLogin = async () => {
     //POST request to login endpoint
     const res = await fetch("http://localhost:3500/login", {
@@ -24,15 +36,28 @@ const LoginContent = () => {
     //Await response
     const data = await res.json();
 
-    cookies.set("jwt", data.token, { path: "/" });
+    //Set cookie with accesstoken
+    if (data.token) cookies.set("jwt", data.token, { path: "/" });
 
+    //Store response data
     return setResponse(data);
   };
   const handleLogin = (e) => {
     e.preventDefault();
-    fetchLogin();
+    if (disabled) return;
 
-    return setLogin(true);
+    setEmail("");
+    setPassword("");
+
+    setDisabled(true);
+    console.log("Clicked");
+
+    fetchLogin();
+    const timeOut = setTimeout(() => {
+      setResponse([]);
+    }, 5000);
+
+    return () => clearTimeout(timeOut);
   };
 
   return (
@@ -62,7 +87,7 @@ const LoginContent = () => {
         >
           Sign in
         </button>
-        {login ? (
+        {response.success ? (
           <p className="response-p">{response.message}</p>
         ) : (
           <p className="error">{response.message}</p>

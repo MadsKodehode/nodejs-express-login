@@ -32,7 +32,7 @@ const Auth = () => {
       <button onClick={() => logOut()}>Logout</button>
     </>
   ) : (
-    ""
+    (window.location.href = "/")
   );
 };
 
