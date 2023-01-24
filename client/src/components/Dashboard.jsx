@@ -1,46 +1,48 @@
 import { useEffect, useState } from "react";
-import { Link } from "react-router-dom";
+import { Link, redirect, Navigate } from "react-router-dom";
 import Cookies from "universal-cookie";
 const cookies = new Cookies();
-const Auth = () => {
-  //State for storing response data
+const Dashboard = () => {
   const [response, setResponse] = useState([]);
-  //Bool for authorized access
   const [authorized, setAuthorized] = useState(false);
 
   const token = cookies.get("jwt");
+  /* if (!token) window.location.href = "/login"; */
 
+  const logOut = () => {
+    cookies.remove("jwt", { path: "/" });
+    window.location.href = "/";
+  };
   useEffect(() => {
     const myHeaders = new Headers();
     if (token) {
       myHeaders.append("Content-type", "application/json");
       myHeaders.append("Authorization", "Bearer " + token);
     }
-    fetch("http://localhost:3500/auth-access", {
+    fetch("http://localhost:3500/dashboard", {
       method: "GET",
       headers: myHeaders,
     })
       .then((res) => {
         if (res.status === 200) {
           setAuthorized(true);
-          console.log(authorized);
           return res.json();
         }
       })
       .then((data) => setResponse(data))
-      .catch((err) => console.log(err));
+      .catch((err) => console.error(err));
   }, []);
 
   return authorized ? (
     <>
       <h1>{response.message}</h1>
+      <Link to="/auth-access">Auth</Link>
+      <Link to="/free-access">Free</Link>
+      <button onClick={() => logOut()}>Logout</button>
     </>
   ) : (
-    <>
-      <h1>You need to be logged in!</h1>
-      <Link to="/login">Go to login</Link>
-    </>
+    ""
   );
 };
 
-export default Auth;
+export default Dashboard;
