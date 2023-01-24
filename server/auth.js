@@ -2,20 +2,26 @@ const jwt = require("jsonwebtoken");
 require("dotenv").config();
 module.exports = async (req, res, next) => {
   try {
+    //Get auth header
+    const authHeader = req.headers.authorization || req.headers.Authorization;
+
+    //IF auth header doesnt start with bearer
+    if (!authHeader?.startsWith("Bearer ")) return res.sendStatus(401);
+
     //Get token from authorization header
-    const token = await req.headers.authorization.split(" ")[1];
-    console.log(token);
+    const token = await authHeader.split(" ")[1];
+
     //Check if token matches origin
-    const decodedToken = jwt.verify(token, process.env.ACCESS_TOKEN_SECRET);
+    jwt.verify(token, process.env.ACCESS_TOKEN_SECRET, (err, decoded) => {
+      if (err) res.sendStatus(403);
 
-    //Retrieve user details for logged in user
-    const user = decodedToken;
-
-    //Pass user to end point
-    req.user = user;
+      req.user = decoded.userEmail;
+      console.log(req.user);
+    });
 
     next();
   } catch (err) {
-    res.status(401).json({ err: new Error("Invalid request!") });
+    res.status(500);
+    console.log(err);
   }
 };

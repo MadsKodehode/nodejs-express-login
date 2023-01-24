@@ -19,13 +19,13 @@ const registerHandle = async (req, res) => {
   //Check if username is found
   if (foundUsername)
     return res
-      .status(409)
+      .sendStatus(409)
       .json({ message: "This username is in use", success: false });
 
   //Check if email is found
   if (foundEmail)
     return res
-      .status(409)
+      .sendStatus(409)
       .json({ message: "Email is already in use", success: false });
 
   //Hash pwd before saving to database
@@ -43,12 +43,12 @@ const registerHandle = async (req, res) => {
     //Save user to db
     user.save();
 
-    //Send status 201 successfully created
+    //Set status 201 successfully created
     res
       .status(201)
       .json({ message: "Account created successfully", success: true });
   } catch (err) {
-    //Catch err send 500 generic error
+    //Catch err and set 500 generic
     res.status(500).json({ message: err.message });
   }
 };

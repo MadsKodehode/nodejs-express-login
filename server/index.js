@@ -33,13 +33,15 @@ app.use(cookieParser());
 app.use("/register", require("./routes/register"));
 //Login route
 app.use("/login", require("./routes/login"));
+//Dashboard route
+app.use("/dashboard", require("./routes/dashboard"));
 //Free access
 app.use("/free-access", require("./routes/free-access"));
 //Auth access
 app.use("/auth-access", require("./routes/authorized-access"));
 
 app.all("/*", (req, res) => {
-  res.status(404).json({ error: "Not found" });
+  res.sendStatus(404).json({ error: "Not found" });
 });
 
 //Making sure we are connected to db before listening to port
