@@ -13,19 +13,20 @@ const registerHandle = async (req, res) => {
 
   //Find user with same username
   const foundUsername = await User.findOne({ username: req.body.username });
+
   //Find user with same email
   const foundEmail = await User.findOne({ email: req.body.email });
 
   //Check if username is found
   if (foundUsername)
     return res
-      .sendStatus(409)
+      .status(409)
       .json({ message: "This username is in use", success: false });
 
   //Check if email is found
   if (foundEmail)
     return res
-      .sendStatus(409)
+      .status(409)
       .json({ message: "Email is already in use", success: false });
 
   //Hash pwd before saving to database

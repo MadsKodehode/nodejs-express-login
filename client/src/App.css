@@ -82,4 +82,25 @@ body {
     padding-block: 0.25rem;
     color: #ff5656;
   }
+
+  a {
+    color: #fff;
+    padding: 1rem;
+    text-decoration: none;
+  }
+
+  .home-headline {
+    text-align: center;
+    color: #fff;
+    padding: 1rem;
+  }
+
+  a:hover {
+    color: #3ec6ff;
+  }
+
+  .link-wrap {
+    display: flex;
+    justify-content: space-between;
+  }
 }

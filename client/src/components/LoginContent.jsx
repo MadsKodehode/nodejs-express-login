@@ -3,7 +3,24 @@ import { useState } from "react";
 import { Link, redirect } from "react-router-dom";
 import Cookies from "universal-cookie";
 const cookies = new Cookies();
+
 const LoginContent = () => {
+  const token = cookies.get("jwt");
+  const myHeaders = new Headers();
+  useEffect(() => {
+    if (token) myHeaders.append("Authorization", "Bearer " + token);
+
+    fetch("http://localhost:3500/login", {
+      method: "GET",
+      headers: myHeaders,
+      credentials: "include",
+    })
+      .then((res) => {
+        if (res.redirected) window.location.href = "/dashboard";
+      })
+      .then((data) => console.log(data))
+      .catch((err) => console.log(err));
+  });
   //Input states
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
