@@ -20,7 +20,13 @@ dbConnect();
 
 //////////////Middleware\\\\\\\\\\\\\
 //Cors
-app.use(cors());
+app.use(
+  cors({
+    origin: "http://localhost:3000",
+    credentials: true,
+  })
+);
+
 //Body parser
 app.use(express.json());
 //Form data handler
@@ -39,10 +45,6 @@ app.use("/dashboard", require("./routes/dashboard"));
 app.use("/free-access", require("./routes/free-access"));
 //Auth access
 app.use("/auth-access", require("./routes/authorized-access"));
-
-app.all("/*", (req, res) => {
-  res.sendStatus(404).json({ error: "Not found" });
-});
 
 //Making sure we are connected to db before listening to port
 mongoose.connection.once("open", () => {

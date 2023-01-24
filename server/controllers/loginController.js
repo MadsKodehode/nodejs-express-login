@@ -19,7 +19,7 @@ const loginHandle = async (req, res) => {
     if (!foundUser) {
       //THEN 404 not found
       return res
-        .sendStatus(401)
+        .status(401)
         .json({ message: "Wrong email or password", success: false });
     }
 
@@ -32,7 +32,7 @@ const loginHandle = async (req, res) => {
     //Check if passwords match
     if (!passwordCheck) {
       return res
-        .sendStatus(401)
+        .status(401)
         .json({ message: "Wrong email or password", success: false });
     }
 
