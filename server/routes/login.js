@@ -3,6 +3,7 @@ const router = express.Router();
 const loginHandle = require("../controllers/loginController");
 const auth = require("../middleware/auth");
 const jwt = require("jsonwebtoken");
+const { json } = require("express");
 router.get("/", (req, res) => {
   if (!req.cookies.jwt) {
     return res.json({ message: "Sign in!" });
@@ -13,7 +14,12 @@ router.get("/", (req, res) => {
   //Then verify token
   const userIsLoggedIn = jwt.verify(token, process.env.ACCESS_TOKEN_SECRET);
 
-  if (userIsLoggedIn) res.redirect("/dashboard");
+  if (userIsLoggedIn) {
+    return res.json({
+      message: `Already logged in with email: ${userIsLoggedIn.userEmail}`,
+      shouldRedirect: true,
+    });
+  }
 });
 
 router.post("/", loginHandle);
