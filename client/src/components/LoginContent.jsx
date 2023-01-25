@@ -7,6 +7,17 @@ const cookies = new Cookies();
 const LoginContent = () => {
   const token = cookies.get("jwt");
   const myHeaders = new Headers();
+  //Input states
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
+
+  //State for displaying response
+  const [response, setResponse] = useState([]);
+
+  //State for disabling button if clicked once
+  const [disabled, setDisabled] = useState(false);
+
+  const [loggedIn, setLoggedIn] = useState(false);
   useEffect(() => {
     if (token) myHeaders.append("Authorization", "Bearer " + token);
 
@@ -15,26 +26,25 @@ const LoginContent = () => {
       headers: myHeaders,
       credentials: "include",
     })
-      .then((res) => {
-        if (res.redirected) window.location.href = "/dashboard";
+      .then((res) => res.json())
+      .then((data) => {
+        setResponse(data);
+        if (data.shouldRedirect) {
+          setLoggedIn(true);
+          const timeOut = setTimeout(() => {
+            window.location.href = "/dashboard";
+          }, 3000);
+          timeOut();
+          return clearTimeout(timeOut);
+        }
       })
-      .then((data) => console.log(data))
       .catch((err) => console.log(err));
-  });
-  //Input states
-  const [email, setEmail] = useState("");
-  const [password, setPassword] = useState("");
-
+  }, []);
+  console.log(loggedIn);
   //Reset state when re entering email and password
   useEffect(() => {
     setDisabled(false);
   }, [email, password]);
-
-  //State for displaying response
-  const [response, setResponse] = useState([]);
-
-  //State for disabling button if clicked once
-  const [disabled, setDisabled] = useState(false);
 
   //Function for sending post request to login endpoint
   const fetchLogin = async () => {
@@ -77,7 +87,12 @@ const LoginContent = () => {
     return () => clearTimeout(timeOut);
   };
 
-  return (
+  return loggedIn ? (
+    <>
+      <h1>{response.message}</h1>
+      <p>Redirecting...</p>
+    </>
+  ) : (
     <>
       <h2 className="headline-form">Sign in</h2>
       <div className="wrap-input">
