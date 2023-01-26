@@ -7,11 +7,11 @@ const Dashboard = () => {
   const [response, setResponse] = useState([]);
 
   //Get token from cookies
-  const token = cookies.get("jwt");
+  const token = cookies.get("accToken");
 
   //Logout function
   const logOut = () => {
-    cookies.remove("jwt", { path: "/" });
+    cookies.remove("accToken", { path: "/" });
     window.location.href = "/";
   };
 

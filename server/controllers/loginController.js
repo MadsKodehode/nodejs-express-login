@@ -12,6 +12,9 @@ const loginHandle = async (req, res) => {
         .json({ message: "Please provide email and password", success: false });
     }
 
+    //Track if remember me is checked
+    console.log(req.body.checked);
+
     //Check if email already exist
     const foundUser = await User.findOne({ email: req.body.email });
 

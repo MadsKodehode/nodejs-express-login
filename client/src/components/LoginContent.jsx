@@ -1,11 +1,11 @@
 import { useEffect } from "react";
 import { useState } from "react";
-import { Link, redirect } from "react-router-dom";
+import { Link } from "react-router-dom";
 import Cookies from "universal-cookie";
 const cookies = new Cookies();
 
 const LoginContent = () => {
-  const token = cookies.get("jwt");
+  const token = cookies.get("accToken");
   const myHeaders = new Headers();
   //Input states
   const [email, setEmail] = useState("");
@@ -16,8 +16,11 @@ const LoginContent = () => {
 
   //State for disabling button if clicked once
   const [disabled, setDisabled] = useState(false);
-
+  //State for logged in
   const [loggedIn, setLoggedIn] = useState(false);
+
+  const [checked, setChecked] = useState(false);
+
   useEffect(() => {
     if (token) myHeaders.append("Authorization", "Bearer " + token);
 
@@ -33,14 +36,14 @@ const LoginContent = () => {
           setLoggedIn(true);
           const timeOut = setTimeout(() => {
             window.location.href = "/dashboard";
-          }, 3000);
+          }, 5000);
           timeOut();
           return clearTimeout(timeOut);
         }
       })
       .catch((err) => console.log(err));
   }, []);
-  console.log(loggedIn);
+
   //Reset state when re entering email and password
   useEffect(() => {
     setDisabled(false);
@@ -57,6 +60,7 @@ const LoginContent = () => {
       body: JSON.stringify({
         email,
         password,
+        checked,
       }),
     });
 
@@ -64,7 +68,7 @@ const LoginContent = () => {
     const data = await res.json();
 
     //Set cookie with accesstoken
-    if (data.token) cookies.set("jwt", data.token, { path: "/" });
+    if (data.token) cookies.set("accToken", data.token, { path: "/" });
 
     //Store response data
     return setResponse(data);
@@ -119,6 +123,15 @@ const LoginContent = () => {
         >
           Sign in
         </button>
+        <span>
+          <label htmlFor="remember">Remember me</label>
+          <input
+            type="checkbox"
+            name="remember"
+            value={checked}
+            onChange={(e) => setChecked((current) => !current)}
+          ></input>
+        </span>
         {response.success ? (
           <p className="response-p">{response.message}</p>
         ) : (
