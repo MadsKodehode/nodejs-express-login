@@ -7,7 +7,7 @@ const Auth = () => {
   const [response, setResponse] = useState([]);
 
   //Get token from cookies
-  const token = cookies.get("jwt");
+  const token = cookies.get("accToken");
 
   //Fetch auth route
   useEffect(() => {

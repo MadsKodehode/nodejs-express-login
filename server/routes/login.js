@@ -5,11 +5,11 @@ const auth = require("../middleware/auth");
 const jwt = require("jsonwebtoken");
 const { json } = require("express");
 router.get("/", (req, res) => {
-  if (!req.cookies.jwt) {
+  if (!req.cookies.accToken) {
     return res.json({ message: "Sign in!" });
   }
   //Get token from cookies
-  const token = req.cookies.jwt;
+  const token = req.cookies.accToken;
 
   //Then verify token
   const userIsLoggedIn = jwt.verify(token, process.env.ACCESS_TOKEN_SECRET);
