@@ -2,7 +2,6 @@ const jwt = require("jsonwebtoken");
 require("dotenv").config();
 module.exports = async (req, res, next) => {
   try {
-    console.log("started loading dash");
     //Get auth header
     const authHeader = req.headers.authorization || req.headers.Authorization;
 
@@ -18,7 +17,7 @@ module.exports = async (req, res, next) => {
 
       req.user = decoded.userEmail;
     });
-    console.log(req.user);
+
     next();
   } catch (err) {
     res.status(500);

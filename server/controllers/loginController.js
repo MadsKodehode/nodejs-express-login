@@ -1,7 +1,7 @@
 const bcrypt = require("bcrypt");
 const User = require("../db/userModel");
 const jwt = require("jsonwebtoken");
-
+const cookieOptions = require("../config/cookieConfig");
 require("dotenv").config();
 const loginHandle = async (req, res) => {
   try {
@@ -58,6 +58,9 @@ const loginHandle = async (req, res) => {
       process.env.REFRESH_TOKEN_SECRET,
       { expiresIn: "1d" }
     );
+
+    //Set httponly cookie with refreshtoken
+    res.cookie("jwt", refreshToken, cookieOptions);
 
     //Successful login
     res.status(200).json({
