@@ -22,7 +22,7 @@ dbConnect();
 //Cors
 app.use(
   cors({
-    origin: "http://localhost:3000",
+    origin: true,
     credentials: true,
   })
 );
@@ -45,7 +45,7 @@ app.use("/dashboard", require("./routes/dashboard"));
 app.use("/free-access", require("./routes/free-access"));
 //Auth access
 app.use("/auth-access", require("./routes/authorized-access"));
-
+app.use("/logout", require("./routes/logout"));
 //Making sure we are connected to db before listening to port
 mongoose.connection.once("open", () => {
   console.log("Connected to MongoDB");

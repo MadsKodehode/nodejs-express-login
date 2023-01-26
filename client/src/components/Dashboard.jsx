@@ -6,13 +6,26 @@ const Dashboard = () => {
   //State for storing response data
   const [response, setResponse] = useState([]);
 
-  //Get token from cookies
+  //Get access token from cookies
   const token = cookies.get("accToken");
 
   //Logout function
-  const logOut = () => {
+  const logOut = async () => {
     cookies.remove("accToken", { path: "/" });
-    window.location.href = "/";
+    /* window.location.href = "/";  */
+
+    //Make post request to logout
+    const res = await fetch("http://localhost:3500/logout", {
+      method: "POST",
+      headers: {
+        "Content-type": "application/json",
+      },
+      credentials: "include",
+    });
+    console.log(res);
+
+    const data = await res.json();
+    console.log(data);
   };
 
   useEffect(() => {
@@ -25,6 +38,7 @@ const Dashboard = () => {
     fetch("http://localhost:3500/dashboard", {
       method: "GET",
       headers: myHeaders,
+      credentials: "include",
     })
       .then((res) => {
         if (res.status === 200) {

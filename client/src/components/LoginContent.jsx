@@ -18,9 +18,10 @@ const LoginContent = () => {
   const [disabled, setDisabled] = useState(false);
   //State for logged in
   const [loggedIn, setLoggedIn] = useState(false);
-
+  //State for checking remember me in login
   const [checked, setChecked] = useState(false);
 
+  //Get login page
   useEffect(() => {
     if (token) myHeaders.append("Authorization", "Bearer " + token);
 
@@ -57,6 +58,7 @@ const LoginContent = () => {
       headers: {
         "Content-type": "application/json",
       },
+      credentials: "include",
       body: JSON.stringify({
         email,
         password,
