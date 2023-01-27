@@ -46,7 +46,7 @@ const loginHandle = async (req, res) => {
         userEmail: foundUser.email,
       },
       process.env.ACCESS_TOKEN_SECRET,
-      { expiresIn: "24h" }
+      { expiresIn: "30s" }
     );
 
     //Create refresh token

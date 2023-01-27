@@ -45,6 +45,8 @@ app.use("/dashboard", require("./routes/dashboard"));
 app.use("/free-access", require("./routes/free-access"));
 //Auth access
 app.use("/auth-access", require("./routes/authorized-access"));
+app.use("/refresh", require("./routes/refresh"));
+//Logout route
 app.use("/logout", require("./routes/logout"));
 //Making sure we are connected to db before listening to port
 mongoose.connection.once("open", () => {

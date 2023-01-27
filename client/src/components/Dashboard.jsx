@@ -25,7 +25,7 @@ const Dashboard = () => {
     console.log(res);
 
     const data = await res.json();
-    console.log(data);
+    if (data.shouldRedirect) return (window.location.href = "/login");
   };
 
   useEffect(() => {
@@ -41,11 +41,18 @@ const Dashboard = () => {
       credentials: "include",
     })
       .then((res) => {
-        if (res.status === 200) {
+        if (res.status === 401) {
+          return logOut();
+        } else {
           return res.json();
         }
       })
-      .then((data) => setResponse(data))
+      .then((data) => {
+        if (!data?.shouldRedirect) {
+          setResponse(data);
+        } else {
+        }
+      })
       .catch((err) => console.error(err));
   }, []);
 
