@@ -22,7 +22,7 @@ const handleLogout = (req, res) => {
 
   res.clearCookie("jwt", cookieOptions);
 
-  return res.json({ message: "Successfully logged out" });
+  return res.json({ message: "Logged out", shouldRedirect: true });
 };
 
 module.exports = handleLogout;

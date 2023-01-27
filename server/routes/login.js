@@ -6,7 +6,7 @@ const jwt = require("jsonwebtoken");
 const { json } = require("express");
 router.get("/", (req, res) => {
   if (!req.cookies.accToken) {
-    return res.json({ message: "Sign in!" });
+    return res.status(200).json({ message: "Please log in" });
   }
   //Get token from cookies
   const token = req.cookies.accToken;
