@@ -45,6 +45,7 @@ app.use("/dashboard", require("./routes/dashboard"));
 app.use("/free-access", require("./routes/free-access"));
 //Auth access
 app.use("/auth-access", require("./routes/authorized-access"));
+//Refresh route
 app.use("/refresh", require("./routes/refresh"));
 //Logout route
 app.use("/logout", require("./routes/logout"));

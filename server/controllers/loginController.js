@@ -16,7 +16,7 @@ const loginHandle = async (req, res) => {
     console.log(req.body.checked);
 
     //Check if email already exist
-    const foundUser = await User.findOne({ email: req.body.email });
+    const foundUser = await User.findOne({ email: req.body.email }).exec();
 
     //IF email doesnt exist
     if (!foundUser) {
@@ -58,6 +58,12 @@ const loginHandle = async (req, res) => {
       process.env.REFRESH_TOKEN_SECRET,
       { expiresIn: "1d" }
     );
+
+    //Give refresh token to user in db
+    foundUser.refreshToken = refreshToken;
+
+    //Save user in db
+    await foundUser.save();
 
     //Set httponly cookie with refreshtoken
     res.cookie("jwt", refreshToken, cookieOptions);
