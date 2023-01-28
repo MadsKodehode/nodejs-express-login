@@ -12,10 +12,12 @@ const registerHandle = async (req, res) => {
       .json({ message: "Please enter all fields", success: false });
 
   //Find user with same username
-  const foundUsername = await User.findOne({ username: req.body.username });
+  const foundUsername = await User.findOne({
+    username: req.body.username,
+  }).exec();
 
   //Find user with same email
-  const foundEmail = await User.findOne({ email: req.body.email });
+  const foundEmail = await User.findOne({ email: req.body.email }).exec();
 
   //Check if username is found
   if (foundUsername)
@@ -42,7 +44,7 @@ const registerHandle = async (req, res) => {
     });
 
     //Save user to db
-    user.save();
+    await user.save();
 
     //Set status 201 successfully created
     res

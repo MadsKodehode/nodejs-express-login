@@ -9,6 +9,22 @@ const Auth = () => {
   //Get token from cookies
   const token = cookies.get("accToken");
 
+  //Refresh token function
+  const refreshJwt = async () => {
+    //Send request to refresh the jwt
+    const res = await fetch("http://localhost:3500/refresh", {
+      method: "POST",
+      credentials: "include",
+    });
+    //Recieve data back
+    /*  const data = await res.json(); */
+    const data = await res.json();
+
+    if (data.accessToken) cookies.remove("accToken", { path: "/" });
+
+    cookies.set("accToken", data.accessToken, { path: "/" });
+  };
+
   //Fetch auth route
   useEffect(() => {
     const myHeaders = new Headers();
@@ -21,14 +37,14 @@ const Auth = () => {
       method: "GET",
       headers: myHeaders,
     })
-      .then((res) => {
-        if (res.status === 200) {
-          return res.json();
-        }
+      .then((res) => res.json())
+      .then((data) => {
+        if (data.tokenExpired) refreshJwt();
+
+        setResponse(data);
       })
-      .then((data) => setResponse(data))
       .catch((err) => console.log(err));
-  }, []);
+  }, [token]);
 
   return token ? (
     <>

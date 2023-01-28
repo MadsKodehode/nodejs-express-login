@@ -16,15 +16,13 @@ module.exports = async (req, res, next) => {
       if (err) {
         //If token expired
         if (err.name === "TokenExpiredError") {
-          console.log("expired");
-          return res.sendStatus(401);
+          return res.status(401).json({ tokenExpired: true });
         } else if (err.name !== "TokenExpiredError") {
           //If some other error
-          console.log("here too");
           return res.sendStatus(403);
         }
       }
-
+      //Pass verified user to req
       req.user = decoded.userEmail;
     });
 
