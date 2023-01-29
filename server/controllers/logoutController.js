@@ -3,16 +3,12 @@ const cookieOptions = require("../config/cookieConfig");
 const handleLogout = async (req, res) => {
   //Get request cookies from header
   const cookies = req.cookies;
-
+  console.log(cookies);
   //IF no cookies with refresh token
-  if (!cookies?.jwt) {
-    return res.status(204);
-  }
 
   //Store refreshtoken from cookies
   const refreshToken = cookies.jwt;
-
-  console.log(refreshToken);
+  const accessToken = cookies.accToken;
 
   //Find user to logout
   const foundUser = await User.findOne({ refreshToken }).exec();
@@ -31,7 +27,6 @@ const handleLogout = async (req, res) => {
   await foundUser.save();
 
   res.clearCookie("jwt", cookieOptions);
-
   return res.json({ message: "Logged out", shouldRedirect: true });
 };
 

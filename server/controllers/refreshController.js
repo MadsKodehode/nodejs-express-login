@@ -17,15 +17,19 @@ const handleRefresh = async (req, res) => {
 
   //Verify refresh token
   jwt.verify(refreshToken, process.env.REFRESH_TOKEN_SECRET, (err, decoded) => {
-    //Check if error or user id from db is not same as refresh token id decoded
+    //Check if error
     if (err || foundUser.email !== decoded.userEmail)
       return res.sendStatus(403);
 
+    //Create new access token
     const accessToken = jwt.sign(
       { userId: decoded.userId, userEmail: decoded.userEmail },
       process.env.ACCESS_TOKEN_SECRET,
       { expiresIn: "30s" }
     );
+
+    console.log(decoded.iat);
+    console.log(decoded.exp);
     res.json({ accessToken });
   });
 };

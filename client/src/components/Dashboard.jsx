@@ -2,31 +2,12 @@ import { useEffect, useState } from "react";
 import { Link, Navigate } from "react-router-dom";
 import Cookies from "universal-cookie";
 const cookies = new Cookies();
-const Dashboard = () => {
+const Dashboard = ({ functions }) => {
   //State for storing response data
   const [response, setResponse] = useState([]);
-
+  const [logOut, refreshJwt] = functions;
   //Get access token from cookies
   const token = cookies.get("accToken");
-
-  //Logout function
-  const logOut = async () => {
-    cookies.remove("accToken", { path: "/" });
-    /* window.location.href = "/";  */
-
-    //Make post request to logout
-    const res = await fetch("http://localhost:3500/logout", {
-      method: "POST",
-      headers: {
-        "Content-type": "application/json",
-      },
-      credentials: "include",
-    });
-    console.log(res);
-
-    const data = await res.json();
-    if (data.shouldRedirect) return (window.location.href = "/login");
-  };
 
   useEffect(() => {
     const myHeaders = new Headers();
@@ -40,18 +21,12 @@ const Dashboard = () => {
       headers: myHeaders,
       credentials: "include",
     })
-      .then((res) => {
-        if (res.status === 401) {
-          return logOut();
-        } else {
-          return res.json();
-        }
-      })
+      .then((res) => res.json())
       .then((data) => {
-        if (!data?.shouldRedirect) {
-          setResponse(data);
-        } else {
+        if (data.tokenExpired) {
+          refreshJwt();
         }
+        setResponse(data);
       })
       .catch((err) => console.error(err));
   }, []);

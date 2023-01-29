@@ -2,28 +2,12 @@ import { useEffect, useState } from "react";
 import { Link, Navigate } from "react-router-dom";
 import Cookies from "universal-cookie";
 const cookies = new Cookies();
-const Auth = () => {
+const Auth = ({ refreshJwt }) => {
   //State for storing response data
   const [response, setResponse] = useState([]);
 
   //Get token from cookies
   const token = cookies.get("accToken");
-
-  //Refresh token function
-  const refreshJwt = async () => {
-    //Send request to refresh the jwt
-    const res = await fetch("http://localhost:3500/refresh", {
-      method: "POST",
-      credentials: "include",
-    });
-    //Recieve data back
-    /*  const data = await res.json(); */
-    const data = await res.json();
-
-    if (data.accessToken) cookies.remove("accToken", { path: "/" });
-
-    cookies.set("accToken", data.accessToken, { path: "/" });
-  };
 
   //Fetch auth route
   useEffect(() => {
