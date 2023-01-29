@@ -6,7 +6,7 @@ module.exports = async (req, res, next) => {
     const authHeader = req.headers.authorization || req.headers.Authorization;
 
     //IF auth header doesnt start with bearer
-    if (!authHeader?.startsWith("Bearer ")) return res.sendStatus(401);
+    if (!authHeader?.startsWith("Bearer ")) return res.sendStatus(403);
 
     //Get token from authorization header
     const token = await authHeader.split(" ")[1];
@@ -14,6 +14,7 @@ module.exports = async (req, res, next) => {
     //Check if token matches origin
     jwt.verify(token, process.env.ACCESS_TOKEN_SECRET, (err, decoded) => {
       if (err) {
+        console.log(decoded);
         //If token expired
         if (err.name === "TokenExpiredError") {
           return res.status(401).json({ tokenExpired: true });
@@ -22,6 +23,7 @@ module.exports = async (req, res, next) => {
           return res.sendStatus(403);
         }
       }
+
       //Pass verified user to req
       req.user = decoded.userEmail;
     });
